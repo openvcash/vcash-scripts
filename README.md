@@ -12,5 +12,5 @@ sudo adduser <user> sudo
 As user:
 ```
 cd ~
-bash < <(curl -s  https://raw.github.com/xCoreDev/vanillacoin-scripts/vanillacoin-install-linux.sh)
+bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/vanillacoin-install-linux.sh)
 ```
