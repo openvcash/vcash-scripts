@@ -1,16 +1,16 @@
-# Vanillacoin Install script
+Vanillacoin Install script
 
 ## Req.
 User must be in sudo group :
 
-### Debian
+#### Debian
 As root: user must already exist (non-root-user for example)
 ```
 apt-get install sudo curl screen -y
 adduser non-root-user sudo
 ```
 
-### Ubuntu
+#### Ubuntu
 As user: user must already be in sudo group (or try Debian style)
 ```
 sudo apt-get install sudo curl screen -y
