@@ -1,7 +1,7 @@
 # Vanillacoin Install script
 
 ## Req.
-User have to be in sudo group :
+User must be in sudo group :
 As root:
 ```
 apt-get install sudo curl
