@@ -56,15 +56,15 @@ mv boost_1_53_0 vanillacoin-src/deps/boost
 cd $VANILLA_ROOT/vanillacoin-src/deps/boost/
 echo "Build boost system"
 ./bootstrap.sh
-./bjam -d 0 link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
+./bjam link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
 
 # Vanillacoin daemon
 cd $VANILLA_ROOT/vanillacoin-src/
 echo "1st bjam"
-deps/boost/bjam -d 0 toolset=gcc cxxflags=-std=gnu++0x release
+deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cd test/
 echo "2nd bjam"
-../deps/boost/bjam -d 0 toolset=gcc cxxflags=-std=gnu++0x release
+../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 # Clean
@@ -74,4 +74,7 @@ rm -Rf db-4.8.30.NC/ openssl-1.0.1l/
 rm openssl-1.0.1l.tar.gz db-4.8.30.NC.tar.gz boost_1_53_0.tar.gz
 
 # Start
-./vanillacoind
+screen -d -S vanillacoind -m ./vanillacoind
+echo "Vanillacoind launched in a screen session. To switch:"
+echo "screen -x vanillacoind"
+echo "Ctrl-a Ctrl-d to detach"
