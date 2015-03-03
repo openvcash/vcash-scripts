@@ -1,7 +1,8 @@
 # Vanillacoin Install script
 
 ## Warning !
-Testing phase, so please backup your existing wallet files (.Vanillacoin folder) & your daemon binary (vanillacoind file) before running install script
+Testing phase, so please backup your existing wallet files (.Vanillacoin folder) & your daemon binary (vanillacoind file) before running install script.
+I can't be responsible if you broke something.
 
 ## Req.
 User must be in sudo group :
