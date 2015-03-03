@@ -4,7 +4,7 @@
 User must be in sudo group :
 As root:
 ```
-apt-get install sudo curl
+apt-get install sudo curl -y
 sudo adduser <user> sudo
 ```
 
