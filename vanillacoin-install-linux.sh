@@ -25,7 +25,7 @@ git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo 'OpenSSL Install'
-wget --no-check-certificate https://www.openssl.org/source/openssl-1.0.1l.tar.gz
+wget --no-check-certificate 'https://www.openssl.org/source/openssl-1.0.1l.tar.gz'
 echo 'b2cf4d48fe5d49f240c61c9e624193a6f232b5ed0baf010681e725963c40d1d4  openssl-1.0.1l.tar.gz' | sha256sum -c
 tar -xzf openssl-*.tar.gz
 cd openssl-*
@@ -35,11 +35,11 @@ make && make install
 
 # DB
 cd $VANILLA_ROOT
-wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
-echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef  db-4.8.30.NC.tar.gz' | sha256sum -c
-tar -xzf db-4.8.30.NC.tar.gz
+wget --no-check-certificate 'https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz'
+echo 'e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a  db-4.8.30.tar.gz' | sha256sum -c
+tar -xzf db-4.8.30.tar.gz
 echo 'Compil & install db in deps forlder'
-cd db-4.8.30.NC/build_unix/
+cd db-4.8.30/build_unix/
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/db/
 ../dist/configure --enable-cxx --prefix=$VANILLA_ROOT/vanillacoin-src/deps/db/
 make
@@ -70,11 +70,14 @@ cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANIL
 # Clean
 cd $VANILLA_ROOT
 echo "Clean after install"
-rm -Rf db-4.8.30.NC/ openssl-1.0.1l/
-rm openssl-1.0.1l.tar.gz db-4.8.30.NC.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-1.0.1l/
+rm openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Start
 screen -d -S vanillacoind -m ./vanillacoind
-echo "Vanillacoind launched in a screen session. To switch:"
-echo "screen -x vanillacoind"
-echo "Ctrl-a Ctrl-d to detach"
+echo ""
+echo " Vanillacoind launched in a screen session. To switch:"
+echo ""
+echo " screen -x vanillacoind"
+echo " Ctrl-a Ctrl-d to detach"
+echo ""

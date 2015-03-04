@@ -26,3 +26,15 @@ As user: Please logoff/login if user freshly added to sudo group
 cd ~
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/vanillacoin-install-linux.sh)
 ```
+Install script auto launch vanillacoind at the end.
+Resume the screen session with:
+```
+screen -x vanillacoind
+```
+Ctrl-a Ctrl-d to detach
+
+## Launch
+```
+cd ~/vanillacoin/
+screen -d -S vanillacoind -m ./vanillacoind
+```
