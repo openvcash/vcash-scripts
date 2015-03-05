@@ -16,7 +16,7 @@ VANILLA_ROOT=$(pwd)
 
 # Clean
 echo 'Clean for fresh install'
-sudo rm -Rf db-4.8.30.NC/ openssl-1.0.1l/ vanillacoin-src/
+sudo rm -Rf db-4.8.30/ openssl-1.0.1l/ vanillacoin-src/
 sudo rm -f openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
