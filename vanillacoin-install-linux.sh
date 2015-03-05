@@ -17,7 +17,7 @@ VANILLA_ROOT=$(pwd)
 # Clean
 echo 'Clean for fresh install'
 sudo rm -Rf db-4.8.30.NC/ openssl-1.0.1l/ vanillacoin-src/
-sudo rm -f openssl-1.0.1l.tar.gz db-4.8.30.NC.tar.gz boost_1_53_0.tar.gz
+sudo rm -f openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo 'Git clone vanillacoin in vanillacoin-src dir'
@@ -42,8 +42,7 @@ echo 'Compil & install db in deps forlder'
 cd db-4.8.30/build_unix/
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/db/
 ../dist/configure --enable-cxx --prefix=$VANILLA_ROOT/vanillacoin-src/deps/db/
-make
-make install
+make && make install
 
 # Boost
 cd $VANILLA_ROOT
@@ -75,9 +74,9 @@ rm openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Start
 screen -d -S vanillacoind -m ./vanillacoind
-echo ""
+echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
-echo ""
+echo -e "\n- - - - - - - - - \n"
 echo " screen -x vanillacoind"
 echo " Ctrl-a Ctrl-d to detach"
-echo ""
+echo -e "\n- - - - - - - - - \n"
