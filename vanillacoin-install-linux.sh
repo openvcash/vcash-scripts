@@ -3,7 +3,7 @@ set -e
 
 # Check root or user
 if (( EUID == 0 )); then
-   echo "You are too root for this ! Recheck README.md file & run it as user." 1>&2
+   echo "You are too root for this ! Recheck README.md file" 1>&2
    exit
 fi
 
@@ -13,7 +13,7 @@ sudo -v || exit
 
 # System Req
 echo 'Check apt-get'
-sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core -y
+sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core screen -y
 
 # Create dir
 echo 'Create vanillacoin dir'
