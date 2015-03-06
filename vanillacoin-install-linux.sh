@@ -21,22 +21,6 @@ sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-
 echo 'Check if vanillacoind is running'
 pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
 
-# Check if there is already a .Vanillacoin folder
-echo 'Check existing config'
-if [ -d "$HOME/.Vanillacoin" ]; then
-	echo -e "\n- - - - - - - - - \n"
-	echo " .Vanillacoin (wallet & config) folder detected !"
-	echo -e "\n- - - - - - - - - \n"
-	echo " If it's the 1st time you run this script:"
-	echo " Please backup your wallet to avoid DB or BOOST related errors"
-	echo -e "\n- - - - - - - - - \n"
-	read -p "Continue anyway ? " -n 1 -r
-	if [[ ! $REPLY =~ ^[Yy]$ ]]
-	then
-		exit
-	fi
-fi
-
 # Create dir
 echo -e '\nCreate vanillacoin dir'
 mkdir -p vanillacoin/
