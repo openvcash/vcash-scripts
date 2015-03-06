@@ -3,8 +3,10 @@ set -e
 
 # Check root or user
 if (( EUID == 0 )); then
-   echo "You are too root for this ! Recheck README.md file" 1>&2
-   exit
+	echo -e "\n- - - - - - - - - \n"
+	echo "You are too root for this ! Recheck README.md file." 1>&2
+	echo -e "\n- - - - - - - - - \n"
+	exit
 fi
 
 # Check sudo group
@@ -15,11 +17,41 @@ sudo -v || exit
 echo 'Check apt-get'
 sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core screen -y
 
+# Check if vanillacoind is running
+echo 'Check if vanillacoind is running'
+pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
+
+# Check if there is already a .Vanillacoin folder
+echo 'Check existing config'
+if [ -d "$HOME/.Vanillacoin" ]; then
+	echo -e "\n- - - - - - - - - \n"
+	echo " .Vanillacoin (wallet & config) folder detected !"
+	echo -e "\n- - - - - - - - - \n"
+	echo " If it's the 1st time you run this script:"
+	echo " Please backup your wallet to avoid DB or BOOST related errors"
+	echo -e "\n- - - - - - - - - \n"
+	read -p "Continue anyway ? " -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]
+	then
+		exit
+	fi
+fi
+
 # Create dir
-echo 'Create vanillacoin dir'
-mkdir -p vanillacoin
+echo -e '\nCreate vanillacoin dir'
+mkdir -p vanillacoin/
 cd vanillacoin/
 VANILLA_ROOT=$(pwd)
+
+# Check existing binary
+echo 'Check existing binary'
+if [ -f "$VANILLA_ROOT/vanillacoind" ]; then
+	BACKUP_FILE="vanillacoind_$(date +%Y-%m-%d_%H-%M-%S)"
+	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_FILE"
+	mkdir -p $VANILLA_ROOT/backup/
+	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_FILE
+	rm -f vanillacoind
+fi
 
 # Clean
 echo 'Clean for fresh install'
@@ -85,5 +117,5 @@ echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
 echo -e "\n- - - - - - - - - \n"
 echo " screen -x vanillacoind"
-echo " Ctrl-a Ctrl-d to detach"
+echo " Ctrl-a Ctrl-d to detach without kill the daemon"
 echo -e "\n- - - - - - - - - \n"
