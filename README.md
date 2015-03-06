@@ -21,7 +21,7 @@ sudo apt-get install sudo curl screen -y
 ```
 
 ## Install
-As user: Please logoff/login if user freshly added to sudo group
+As user: Please logoff/login if user is freshly added to sudo group
 ```
 cd ~
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/vanillacoin-install-linux.sh)
