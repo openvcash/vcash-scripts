@@ -51,4 +51,4 @@ As user: You must be in the vanillacoin/ folder before running the update script
 cd ~/vanillacoin/
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/vanillacoin-update-linux.sh)
 ```
-Previous binaries are saved in the backup/ dir. (will update this soon to get only the 2 last binaries)
+Previous binaries are saved in the backup/ dir. (will update this soon to keep only the 2 last binaries)
