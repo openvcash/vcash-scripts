@@ -5,10 +5,9 @@ sudo -v || exit
 
 # System Req
 echo 'Check apt-get'
-sudo apt-get update -y
-sudo apt-get install build-essential openssl curl git-core -y
+sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core -y
 
-# Create 
+# Create dir
 echo 'Create vanillacoin dir'
 mkdir -p vanillacoin
 cd vanillacoin/

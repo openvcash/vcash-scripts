@@ -5,7 +5,7 @@ Testing phase, so please backup your existing wallet files (.Vanillacoin folder)
 I can't be responsible if you broke something.
 
 ## Req.
-User must be in sudo group :
+User must be in sudo group:
 
 #### Debian
 As root: user must already exist (non-root-user for example)
@@ -34,6 +34,11 @@ screen -x vanillacoind
 Ctrl-a Ctrl-d to detach
 
 ## Launch
+Be sure there's no vanillacoind running before !
+```
+ps x | grep vanillacoind
+```
+To launch:
 ```
 cd ~/vanillacoin/
 screen -d -S vanillacoind -m ./vanillacoind
