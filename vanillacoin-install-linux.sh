@@ -1,5 +1,13 @@
 #!/bin/bash
 set -e
+
+# Check root or user
+if (( EUID == 0 )); then
+   echo "You are too root for this ! Recheck README.md file & run it as user." 1>&2
+   exit
+fi
+
+# Check sudo group
 echo 'Check sudo'
 sudo -v || exit
 
@@ -47,7 +55,7 @@ make && make install
 cd $VANILLA_ROOT
 wget 'https://sourceforge.net/projects/boost/files/boost/1.53.0/boost_1_53_0.tar.gz'
 echo '7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39  boost_1_53_0.tar.gz' | sha256sum -c
-echo 'extract boost'
+echo 'Extract boost'
 tar -xzf boost_1_53_0.tar.gz
 echo 'mv boost to deps folder & rename'
 mv boost_1_53_0 vanillacoin-src/deps/boost
