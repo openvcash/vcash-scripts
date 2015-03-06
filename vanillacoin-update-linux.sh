@@ -63,6 +63,7 @@ echo "2nd bjam"
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 # Start
+cd $VANILLA_ROOT
 screen -d -S vanillacoind -m ./vanillacoind
 echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
