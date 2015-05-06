@@ -37,6 +37,7 @@ fi
 echo "Backup deps"
 mkdir -p $VANILLA_ROOT/backup/
 mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/backup/
+mv -f $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/vanillacoind-$(date +%Y-%m-%d)
 
 # Clean
 echo "Clean before clone"
@@ -61,6 +62,7 @@ cd test/
 echo "2nd bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
+
 
 # Start
 cd $VANILLA_ROOT
