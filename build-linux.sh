@@ -106,13 +106,4 @@ echo "Clean after install"
 rm -Rf db-4.8.30/ openssl-1.0.2c/
 rm openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
-# Start
-cd $VANILLA_ROOT
-echo "screen -d -S vanillacoind -m ./vanillacoind"
-echo -e "\n- - - - - - - - - \n"
-echo " Vanillacoind launched in a screen session. To switch:"
-echo -e "\n- - - - - - - - - \n"
-echo " screen -x vanillacoind"
-echo " Ctrl-a Ctrl-d to detach without kill the daemon"
-echo -e "\n- - - - - - - - - \n"
 
