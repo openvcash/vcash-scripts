@@ -39,8 +39,8 @@ fi
 
 # Clean
 echo "Clean for fresh install"
-sudo rm -Rf db-4.8.30/ openssl-1.0.1l/ vanillacoin-src/
-sudo rm -f openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+sudo rm -Rf db-4.8.30/ openssl-1.0.2c/ vanillacoin-src/
+sudo rm -f openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
@@ -48,8 +48,8 @@ git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo "OpenSSL Install"
-wget --no-check-certificate "https://www.openssl.org/source/openssl-1.0.1l.tar.gz"
-echo "b2cf4d48fe5d49f240c61c9e624193a6f232b5ed0baf010681e725963c40d1d4  openssl-1.0.1l.tar.gz" | sha256sum -c
+wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2c.tar.gz"
+echo "0038ba37f35a6367c58f17a7a7f687953ef8ce4f9684bbdec63e62515ed36a83  openssl-1.0.2c.tar.gz" | sha256sum -c
 tar -xzf openssl-*.tar.gz
 cd openssl-*
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/openssl/
@@ -82,24 +82,37 @@ echo "Build boost system"
 
 # Vanillacoin daemon
 cd $VANILLA_ROOT/vanillacoin-src/
-echo "1st bjam"
+echo "1st vanillacoind bjam"
 deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cd test/
-echo "2nd bjam"
+echo "2nd vanillacoind bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
+
+# Database
+mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/vanillacoin-src/database/
+cd $VANILLA_ROOT/vanillacoin-src/database/
+echo "1st database bjam"
+deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
+cd test/
+echo "2nd database bjam"
+../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
+cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/database
+mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src/
 
 # Clean
 cd $VANILLA_ROOT
 echo "Clean after install"
-rm -Rf db-4.8.30/ openssl-1.0.1l/
-rm openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-1.0.2c/
+rm openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Start
-screen -d -S vanillacoind -m ./vanillacoind
+cd $VANILLA_ROOT
+echo "screen -d -S vanillacoind -m ./vanillacoind"
 echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
 echo -e "\n- - - - - - - - - \n"
 echo " screen -x vanillacoind"
 echo " Ctrl-a Ctrl-d to detach without kill the daemon"
 echo -e "\n- - - - - - - - - \n"
+

@@ -64,9 +64,21 @@ echo "2nd bjam"
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 
+# Database
+mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/vanillacoin-src/database/
+cd $VANILLA_ROOT/vanillacoin-src/database/
+echo "1st database bjam"
+deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
+cd test/
+echo "2nd database bjam"
+../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
+cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/database
+mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src/
+
+
 # Start
 cd $VANILLA_ROOT
-screen -d -S vanillacoind -m ./vanillacoind
+echo "screen -d -S vanillacoind -m ./vanillacoind"
 echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
 echo -e "\n- - - - - - - - - \n"
