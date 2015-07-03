@@ -73,7 +73,7 @@ deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
 cd test/
 echo "2nd database bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
-cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/database
+cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/databased
 mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src/
 
 
