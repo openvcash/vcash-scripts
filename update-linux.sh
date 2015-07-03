@@ -79,17 +79,11 @@ mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src
 
 # Start
 cd $VANILLA_ROOT
-echo "screen -d -S vanillacoind -m ./vanillacoind"
 echo -e "\n- - - - - - - - - \n"
-echo " Vanillacoind launched in a screen session. To switch:"
-echo -e "\n- - - - - - - - - \n"
-echo " screen -x vanillacoind"
-echo " Ctrl-a Ctrl-d to detach without kill the daemon"
-echo -e "\n- - - - - - - - - \n"
-echo "screen -d -S databased -m ./databased"
-echo -e "\n- - - - - - - - - \n"
-echo " Databased launched in a screen session. To switch:"
+echo " screen -d -S vanillacoind -m ./vanillacoind"
+echo " screen -d -S databased -m ./databased"
 echo -e "\n- - - - - - - - - \n"
 echo " screen -x vanillacoind"
+echo " screen -x databased"
 echo " Ctrl-a Ctrl-d to detach without kill the daemon"
 echo -e "\n- - - - - - - - - \n"
