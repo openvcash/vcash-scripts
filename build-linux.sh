@@ -9,14 +9,6 @@ if (( EUID == 0 )); then
 	exit
 fi
 
-# Check sudo group
-echo "Check sudo"
-sudo -v || exit
-
-# System Req
-echo "Check apt-get"
-sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core screen -y
-
 # Check if vanillacoind is running
 echo "Check if vanillacoind is running"
 pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
@@ -27,20 +19,30 @@ mkdir -p vanillacoin/
 cd vanillacoin/
 VANILLA_ROOT=$(pwd)
 
-# Check existing binary
+# Check existing vanillacoind binary
 echo "Check existing binary"
 if [[ -f "$VANILLA_ROOT/vanillacoind" ]]; then
-	BACKUP_FILE="vanillacoind_$(date +%Y-%m-%d_%H-%M-%S)"
-	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_FILE"
+	BACKUP_VANILLACOIND="vanillacoind_$(date +%Y-%m-%d_%H-%M-%S)"
+	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND"
 	mkdir -p $VANILLA_ROOT/backup/
-	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_FILE
+	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND
 	rm -f vanillacoind
+fi
+
+# Check existing databased binary
+echo "Check existing binary"
+if [[ -f "$VANILLA_ROOT/databased" ]]; then
+	BACKUP_DATABASED="databased_$(date +%Y-%m-%d_%H-%M-%S)"
+	echo "Existing databased binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_DATABASED"
+	mkdir -p $VANILLA_ROOT/backup/
+	mv $VANILLA_ROOT/databased $VANILLA_ROOT/backup/$BACKUP_DATABASED
+	rm -f databased
 fi
 
 # Clean
 echo "Clean for fresh install"
-sudo rm -Rf db-4.8.30/ openssl-1.0.2c/ vanillacoin-src/
-sudo rm -f openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-1.0.2c/ vanillacoin-src/
+rm -f openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
@@ -92,12 +94,12 @@ cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANIL
 # Database
 mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/vanillacoin-src/database/
 cd $VANILLA_ROOT/vanillacoin-src/database/
-echo "1st database bjam"
+echo "1st databased bjam"
 deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
 cd test/
-echo "2nd database bjam"
+echo "2nd databased bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
-cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/database
+cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/databased
 mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src/
 
 # Clean

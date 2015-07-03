@@ -9,13 +9,13 @@ if (( EUID == 0 )); then
 	exit
 fi
 
-# Check sudo group
-echo "Check sudo"
-sudo -v || exit
+# Check if vanillacoind is running
+echo "Check vanillacoind process"
+pgrep vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
 
 # Check if vanillacoind is running
-echo "Check process"
-pgrep vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
+echo "Check databased process"
+pgrep databased && echo "UDP Database daemon is a running ! Please close it first." && exit
 
 # Check path & current daemon binary
 echo "Check path & current binary"
@@ -38,6 +38,7 @@ echo "Backup deps"
 mkdir -p $VANILLA_ROOT/backup/
 mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/backup/
 mv -f $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/vanillacoind-$(date +%Y-%m-%d)
+mv -f $VANILLA_ROOT/databased $VANILLA_ROOT/backup/databased-$(date +%Y-%m-%d)
 
 # Clean
 echo "Clean before clone"
@@ -81,6 +82,13 @@ cd $VANILLA_ROOT
 echo "screen -d -S vanillacoind -m ./vanillacoind"
 echo -e "\n- - - - - - - - - \n"
 echo " Vanillacoind launched in a screen session. To switch:"
+echo -e "\n- - - - - - - - - \n"
+echo " screen -x vanillacoind"
+echo " Ctrl-a Ctrl-d to detach without kill the daemon"
+echo -e "\n- - - - - - - - - \n"
+echo "screen -d -S databased -m ./databased"
+echo -e "\n- - - - - - - - - \n"
+echo " Databased launched in a screen session. To switch:"
 echo -e "\n- - - - - - - - - \n"
 echo " screen -x vanillacoind"
 echo " Ctrl-a Ctrl-d to detach without kill the daemon"
