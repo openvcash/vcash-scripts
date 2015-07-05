@@ -29,16 +29,6 @@ if [[ -f "$VANILLA_ROOT/vanillacoind" ]]; then
 	rm -f vanillacoind
 fi
 
-# Check existing databased binary
-echo "Check existing binary"
-if [[ -f "$VANILLA_ROOT/databased" ]]; then
-	BACKUP_DATABASED="databased_$(date +%Y-%m-%d_%H-%M-%S)"
-	echo "Existing databased binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_DATABASED"
-	mkdir -p $VANILLA_ROOT/backup/
-	mv $VANILLA_ROOT/databased $VANILLA_ROOT/backup/$BACKUP_DATABASED
-	rm -f databased
-fi
-
 # Clean
 echo "Clean for fresh install"
 rm -Rf db-4.8.30/ openssl-1.0.2c/ vanillacoin-src/
@@ -46,7 +36,7 @@ rm -f openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
-git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
+git clone https://github.com/xCoreDee/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo "OpenSSL Install"
@@ -84,23 +74,10 @@ echo "Build boost system"
 
 # Vanillacoin daemon
 cd $VANILLA_ROOT/vanillacoin-src/
-echo "1st vanillacoind bjam"
-deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
+echo "vanillacoind bjam build"
 cd test/
-echo "2nd vanillacoind bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
-
-# Database
-mv -f $VANILLA_ROOT/vanillacoin-src/deps/ $VANILLA_ROOT/vanillacoin-src/database/
-cd $VANILLA_ROOT/vanillacoin-src/database/
-echo "1st databased bjam"
-deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
-cd test/
-echo "2nd databased bjam"
-../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x debug
-cp $VANILLA_ROOT/vanillacoin-src/database/test/bin/gcc-*/debug/link-static/stack $VANILLA_ROOT/databased
-mv -f $VANILLA_ROOT/vanillacoin-src/database/deps/ $VANILLA_ROOT/vanillacoin-src/
 
 # Clean
 cd $VANILLA_ROOT
@@ -108,4 +85,11 @@ echo "Clean after install"
 rm -Rf db-4.8.30/ openssl-1.0.2c/
 rm openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
-
+# Start
+screen -d -S vanillacoind -m ./vanillacoind
+echo -e "\n- - - - - - - - - \n"
+echo " Vanillacoind launched in a screen session. To switch:"
+echo -e "\n- - - - - - - - - \n"
+echo " screen -x vanillacoind"
+echo " Ctrl-a Ctrl-d to detach without kill the daemon"
+echo -e "\n- - - - - - - - - \n"
