@@ -22,7 +22,7 @@ VANILLA_ROOT=$(pwd)
 # Check existing vanillacoind binary
 echo "Check existing binary"
 if [[ -f "$VANILLA_ROOT/vanillacoind" ]]; then
-	BACKUP_VANILLACOIND="vanillacoind_$(date +%Y-%m-%d_%H-%M-%S)"
+	BACKUP_VANILLACOIND="vanillacoind-$(date +%s)"
 	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND"
 	mkdir -p $VANILLA_ROOT/backup/
 	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND

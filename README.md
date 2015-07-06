@@ -4,24 +4,14 @@
 Testing phase, so please backup your existing wallet files (.Vanillacoin folder) & your daemon binary (vanillacoind file) before running install script.
 I can't be responsible if you broke something.
 
-## Req.
-User must be in sudo group:
-
-#### Debian
-As root: user must already exist (non-root-user for example)
+#### Debian / Ubuntu
+As root:
 ```
-apt-get install sudo curl screen -y
-adduser non-root-user sudo
-```
-
-#### Ubuntu
-As user: user must already be in sudo group (or try Debian style)
-```
-sudo apt-get install sudo curl screen -y
+sudo apt-get install build-essential openssl curl git-core screen -y
 ```
 
 ## Install
-As user: Please logoff/login if user is freshly added to sudo group
+As user:
 ```
 cd ~
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/build-linux.sh)
@@ -51,4 +41,4 @@ As user: You must be in the vanillacoin/ folder before running the update script
 cd ~/vanillacoin/
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/update-linux.sh)
 ```
-Previous binaries are saved in the backup/ dir. (will update this soon to keep only the 2 last binaries)
+Previous binaries are saved in the backup/ dir.
