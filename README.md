@@ -1,27 +1,41 @@
-# Vanillacoin Install script
+# Vanillacoin Install / Update Scripts
 
 ## Warning !
-Testing phase, so please backup your existing wallet files (.Vanillacoin folder) & your daemon binary (vanillacoind file) before running install script.
+Please backup your existing wallet files (~/.Vanillacoin/data/ folder).
 I can't be responsible if you broke something.
 
 ## Req.
-User must be in sudo group:
 
-#### Debian
-As root: user must already exist (non-root-user for example)
+#### Debian / Ubuntu / Raspbian
 ```
-apt-get install sudo curl screen -y
-adduser non-root-user sudo
+sudo apt-get install build-essential openssl curl git-core screen -y
 ```
 
-#### Ubuntu
-As user: user must already be in sudo group (or try Debian style)
+#### Raspbian
+Be sure to have enough Swap to avoid 'Virtual memory exhausted: Cannot allocate memory'.
+Raspbian default Swap size is 100mb, please increase the size before building.
+
+Check Swap size:
 ```
-sudo apt-get install sudo curl screen -y
+free -m
+```
+
+Example with 1024mb as Swap size:
+```
+sudo nano /etc/dphys-swapfile
+```
+Edit the file:
+```
+CONF_SWAPSIZE=1024
+```
+Save & restart dphys-swapfile:
+```
+sudo /etc/init.d/dphys-swapfile stop
+sudo /etc/init.d/dphys-swapfile start
 ```
 
 ## Install
-As user: Please logoff/login if user is freshly added to sudo group
+As user:
 ```
 cd ~
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/build-linux.sh)
@@ -36,7 +50,7 @@ Ctrl-a Ctrl-d to detach
 ## Launch
 Be sure there's no vanillacoind running before !
 ```
-ps x | grep vanillacoind
+ps x | grep '[v]anillacoind'
 ```
 To launch:
 ```
@@ -51,4 +65,20 @@ As user: You must be in the vanillacoin/ folder before running the update script
 cd ~/vanillacoin/
 bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/update-linux.sh)
 ```
-Previous binaries are saved in the backup/ dir. (will update this soon to keep only the 2 last binaries)
+Previous binaries are saved in the backup/ dir.
+
+## Crontab
+As user:
+Autostart Vanillacoin daemon on reboot with crontab:
+```
+crontab -e
+```
+Add this entry (edited with your username):
+```
+@reboot pgrep vanillacoind > /dev/null || cd /home/your_username/vanillacoin && screen -d -S vanillacoind -m ./vanillacoind
+```
+save & check crontab:
+```
+crontab -l
+```
+Then do a reboot test.

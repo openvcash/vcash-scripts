@@ -9,14 +9,6 @@ if (( EUID == 0 )); then
 	exit
 fi
 
-# Check sudo group
-echo "Check sudo"
-sudo -v || exit
-
-# System Req
-echo "Check apt-get"
-sudo apt-get update -y && sudo apt-get install build-essential openssl curl git-core screen -y
-
 # Check if vanillacoind is running
 echo "Check if vanillacoind is running"
 pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
@@ -27,20 +19,20 @@ mkdir -p vanillacoin/
 cd vanillacoin/
 VANILLA_ROOT=$(pwd)
 
-# Check existing binary
+# Check existing vanillacoind binary
 echo "Check existing binary"
 if [[ -f "$VANILLA_ROOT/vanillacoind" ]]; then
-	BACKUP_FILE="vanillacoind_$(date +%Y-%m-%d_%H-%M-%S)"
-	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_FILE"
+	BACKUP_VANILLACOIND="vanillacoind-$(date +%s)"
+	echo "Existing vanillacoind binary ! Backup @ $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND"
 	mkdir -p $VANILLA_ROOT/backup/
-	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_FILE
+	mv $VANILLA_ROOT/vanillacoind $VANILLA_ROOT/backup/$BACKUP_VANILLACOIND
 	rm -f vanillacoind
 fi
 
 # Clean
 echo "Clean for fresh install"
-sudo rm -Rf db-4.8.30/ openssl-1.0.1l/ vanillacoin-src/
-sudo rm -f openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-*/ vanillacoin-src/
+rm -f openssl-*.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
@@ -48,8 +40,8 @@ git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo "OpenSSL Install"
-wget --no-check-certificate "https://www.openssl.org/source/openssl-1.0.1l.tar.gz"
-echo "b2cf4d48fe5d49f240c61c9e624193a6f232b5ed0baf010681e725963c40d1d4  openssl-1.0.1l.tar.gz" | sha256sum -c
+wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2d.tar.gz"
+echo "671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8 openssl-1.0.2d.tar.gz" | sha256sum -c
 tar -xzf openssl-*.tar.gz
 cd openssl-*
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/openssl/
@@ -59,7 +51,7 @@ make && make install
 # DB
 cd $VANILLA_ROOT
 wget --no-check-certificate "https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz"
-echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a  db-4.8.30.tar.gz" | sha256sum -c
+echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a db-4.8.30.tar.gz" | sha256sum -c
 tar -xzf db-4.8.30.tar.gz
 echo "Compil & install db in deps forlder"
 cd db-4.8.30/build_unix/
@@ -82,18 +74,16 @@ echo "Build boost system"
 
 # Vanillacoin daemon
 cd $VANILLA_ROOT/vanillacoin-src/
-echo "1st bjam"
-deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
+echo "vanillacoind bjam build"
 cd test/
-echo "2nd bjam"
 ../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 # Clean
 cd $VANILLA_ROOT
 echo "Clean after install"
-rm -Rf db-4.8.30/ openssl-1.0.1l/
-rm openssl-1.0.1l.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-*/
+rm openssl-*.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Start
 screen -d -S vanillacoind -m ./vanillacoind
