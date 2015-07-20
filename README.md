@@ -1,18 +1,18 @@
-# Vanillacoin Install/Update Scripts
+# Vanillacoin Install / Update Scripts
 
 ## Warning !
-Please backup your existing wallet files (.Vanillacoin folder).
+Please backup your existing wallet files (~/.Vanillacoin/data/ folder).
 I can't be responsible if you broke something.
 
 ## Req.
 
-#### Debian / Ubuntu 
+#### Debian / Ubuntu / Raspbian
 ```
 sudo apt-get install build-essential openssl curl git-core screen -y
 ```
 
-#### Raspberry Pi
-Be sure to have enough Swap to avoid 'Virtual memory exhausted: Cannot allocate memory'
+#### Raspbian
+Be sure to have enough Swap to avoid 'Virtual memory exhausted: Cannot allocate memory'.
 Raspbian default Swap size is 100mb, please increase the size before building.
 
 Check Swap size:
@@ -50,7 +50,7 @@ Ctrl-a Ctrl-d to detach
 ## Launch
 Be sure there's no vanillacoind running before !
 ```
-ps x | grep vanillacoind
+ps x | grep '[v]anillacoind'
 ```
 To launch:
 ```
