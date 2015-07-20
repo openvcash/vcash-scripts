@@ -41,7 +41,7 @@ rm -Rf vanillacoin-src/
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
-git clone https://github.com/xCoreDev/vanillacoin.git vanillacoin-src
+git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # Restore deps
 echo "Restore deps"

@@ -31,17 +31,17 @@ fi
 
 # Clean
 echo "Clean for fresh install"
-rm -Rf db-4.8.30/ openssl-1.0.2c/ vanillacoin-src/
-rm -f openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-*/ vanillacoin-src/
+rm -f openssl-*.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Github
 echo "Git clone vanillacoin in vanillacoin-src dir"
-git clone https://github.com/xCoreDev/vanillacoin.git vanillacoin-src
+git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo "OpenSSL Install"
-wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2c.tar.gz"
-echo "0038ba37f35a6367c58f17a7a7f687953ef8ce4f9684bbdec63e62515ed36a83  openssl-1.0.2c.tar.gz" | sha256sum -c
+wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2d.tar.gz"
+echo "671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8 openssl-1.0.2d.tar.gz" | sha256sum -c
 tar -xzf openssl-*.tar.gz
 cd openssl-*
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/openssl/
@@ -51,7 +51,7 @@ make && make install
 # DB
 cd $VANILLA_ROOT
 wget --no-check-certificate "https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz"
-echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a  db-4.8.30.tar.gz" | sha256sum -c
+echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a db-4.8.30.tar.gz" | sha256sum -c
 tar -xzf db-4.8.30.tar.gz
 echo "Compil & install db in deps forlder"
 cd db-4.8.30/build_unix/
@@ -82,8 +82,8 @@ cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANIL
 # Clean
 cd $VANILLA_ROOT
 echo "Clean after install"
-rm -Rf db-4.8.30/ openssl-1.0.2c/
-rm openssl-1.0.2c.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+rm -Rf db-4.8.30/ openssl-*/
+rm openssl-*.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
 
 # Start
 screen -d -S vanillacoind -m ./vanillacoind
