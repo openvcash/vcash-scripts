@@ -40,8 +40,8 @@ git clone https://github.com/john-connor/vanillacoin.git vanillacoin-src
 
 # OpenSSL
 echo "OpenSSL Install"
-wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2d.tar.gz"
-echo "671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8  openssl-1.0.2d.tar.gz" | sha256sum -c
+wget --no-check-certificate "https://openssl.org/source/openssl-1.0.2e.tar.gz"
+echo "e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff  openssl-1.0.2e.tar.gz" | sha256sum -c
 tar -xzf openssl-*.tar.gz
 cd openssl-*
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/openssl/
