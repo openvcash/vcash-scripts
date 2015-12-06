@@ -13,6 +13,17 @@ fi
 echo "Check vanillacoind process"
 pgrep vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
 
+# Check thread number. Keep n-1 thread(s) if nproc >= 2
+nproc=$(nproc)
+if [ $nproc -eq 1 ]
+then
+	((job=nproc))
+elif [ $nproc -gt 1 ]
+then
+	((job=nproc-1))
+fi
+echo "Will use $job thread(s)"
+
 # Check path & current daemon binary
 echo "Check path & current binary"
 VANILLA_ROOT=$(pwd)
@@ -54,7 +65,7 @@ rm -Rf $VANILLA_ROOT/backup/deps/
 cd $VANILLA_ROOT/vanillacoin-src/
 echo "vanillacoind bjam build"
 cd test/
-../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
+../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 cd $VANILLA_ROOT
 

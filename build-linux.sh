@@ -13,6 +13,22 @@ fi
 echo "Check if vanillacoind is running"
 pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
 
+# Check thread number. Keep n-1 thread(s) if nproc >= 2
+nproc=$(nproc)
+if [ $nproc -eq 1 ]
+then
+	((job=nproc))
+elif [ $nproc -gt 1 ]
+then
+	((job=nproc-1))
+fi
+echo "Will use $job thread(s)"
+
+
+# Check if vanillacoind is running
+echo "Check if vanillacoind is running"
+pgrep -l vanillacoind && echo "Vanillacoin daemon is a running ! Please close it first." && exit
+
 # Create dir
 echo -e "\nCreate vanillacoin dir"
 mkdir -p vanillacoin/
@@ -46,7 +62,7 @@ tar -xzf openssl-*.tar.gz
 cd openssl-*
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/openssl/
 ./config threads no-comp --prefix=$VANILLA_ROOT/vanillacoin-src/deps/openssl/
-make depend && make install
+make -j$job depend && make -j$job && make install
 
 # DB
 cd $VANILLA_ROOT
@@ -57,7 +73,7 @@ echo "Compil & install db in deps forlder"
 cd db-4.8.30/build_unix/
 mkdir -p $VANILLA_ROOT/vanillacoin-src/deps/db/
 ../dist/configure --enable-cxx --prefix=$VANILLA_ROOT/vanillacoin-src/deps/db/
-make && make install
+make -j$job && make install
 
 # Boost
 cd $VANILLA_ROOT
@@ -70,13 +86,13 @@ mv boost_1_53_0 vanillacoin-src/deps/boost
 cd $VANILLA_ROOT/vanillacoin-src/deps/boost/
 echo "Build boost system"
 ./bootstrap.sh
-./bjam link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
+./bjam -j$job link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
 
 # Vanillacoin daemon
 cd $VANILLA_ROOT/vanillacoin-src/
 echo "vanillacoind bjam build"
 cd test/
-../deps/boost/bjam toolset=gcc cxxflags=-std=gnu++0x release
+../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 # Clean
