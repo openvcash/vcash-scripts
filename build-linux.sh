@@ -92,7 +92,7 @@ echo "Build boost system"
 cd $VANILLA_ROOT/vanillacoin-src/
 echo "vanillacoind bjam build"
 cd test/
-../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release
+../deps/boost/bjam -j$job toolset=gcc cxxflags="-std=gnu++0x -fpermissive" release
 cp $VANILLA_ROOT/vanillacoin-src/test/bin/gcc-*/release/link-static/stack $VANILLA_ROOT/vanillacoind
 
 # Clean
