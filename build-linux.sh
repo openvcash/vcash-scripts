@@ -77,7 +77,7 @@ make -j$job && make install
 
 # Boost
 cd $VANILLA_ROOT
-wget "https://sourceforge.net/projects/boost/files/boost/1.53.0/boost_1_53_0.tar.gz"
+wget "https://pool.v.cash/static/files/boost_1_53_0.tar.gz"
 echo "7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39  boost_1_53_0.tar.gz" | sha256sum -c
 echo "Extract boost"
 tar -xzf boost_1_53_0.tar.gz
