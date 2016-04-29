@@ -167,9 +167,8 @@ if [[ -f "$STACK_OUT/stack" ]]; then
 	cp $STACK_OUT/stack $VCASH_ROOT/vcashd
 else
 	cd $VCASH_ROOT/src/test/
-	echo "vcashd building error..." >> $VCASH_ROOT/build.log
 	../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | grep error: | tee -a $VCASH_ROOT/build.log
-	echo "vcashd building error..."
+	echo "vcashd building error..." | tee -a $VCASH_ROOT/build.log
 	exit
 fi
 
