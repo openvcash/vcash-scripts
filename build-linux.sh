@@ -116,8 +116,8 @@ else
 	# OpenSSL
 	echo "OpenSSL Install" | tee -a $VCASH_ROOT/build.log
 	cd $VCASH_ROOT
-	wget --no-check-certificate "https://openssl.org/source/openssl-1.0.1q.tar.gz"
-	echo "b3658b84e9ea606a5ded3c972a5517cd785282e7ea86b20c78aa4b773a047fb7  openssl-1.0.1q.tar.gz" | sha256sum -c
+	wget "https://www.openssl.org/source/openssl-1.0.1s.tar.gz"
+	echo "e7e81d82f3cd538ab0cdba494006d44aab9dd96b7f6233ce9971fb7c7916d511  openssl-1.0.1s.tar.gz" | sha256sum -c
 	tar -xzf openssl-*.tar.gz
 	cd openssl-*
 	mkdir -p $VCASH_ROOT/src/deps/openssl/
