@@ -74,12 +74,15 @@ ALL_DEPS=0
 if [[ -d "$VCASH_ROOT/src" ]]; then
 	if [[ -d "$VCASH_ROOT/src/deps/boost" && "$VCASH_ROOT/src/deps/db" && "$VCASH_ROOT/src/deps/openssl" ]]; then
 		mv -f $VCASH_ROOT/src/deps/ $VCASH_ROOT/backup/
+		echo "Deps backed up." | tee -a $VCASH_ROOT/build.log
 		ALL_DEPS=1
 	elif [[ -d "$VCASH_ROOT/backup/deps/boost" && "$VCASH_ROOT/backup/deps/db" && "$VCASH_ROOT/backup/deps/openssl" ]]; then
+		echo "Deps already backed up." | tee -a $VCASH_ROOT/build.log
 		ALL_DEPS=1
 	fi
 else
 	if [[ -d "$VCASH_ROOT/backup/deps/boost" && "$VCASH_ROOT/backup/deps/db" && "$VCASH_ROOT/backup/deps/openssl" ]]; then
+		echo "Deps already backed up." | tee -a $VCASH_ROOT/build.log
 		ALL_DEPS=1
 	fi
 fi
@@ -109,6 +112,7 @@ if [[ $ALL_DEPS == 1 ]]; then
 	mv $VCASH_ROOT/backup/deps/db/ $VCASH_ROOT/src/deps/
 	mv $VCASH_ROOT/backup/deps/openssl/ $VCASH_ROOT/src/deps/
 	rm -Rf $VCASH_ROOT/backup/deps/
+	echo "Deps restored." | tee -a $VCASH_ROOT/build.log
 else
 	# OpenSSL
 	echo "OpenSSL Install" | tee -a $VCASH_ROOT/build.log
