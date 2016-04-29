@@ -70,20 +70,17 @@ if [[ -d "$VCASH_ROOT/vanillacoin-src" ]]; then
 fi
 
 # Check src dir & backup deps
+ALL_DEPS=0
 if [[ -d "$VCASH_ROOT/src" ]]; then
 	if [[ -d "$VCASH_ROOT/src/deps/boost" && "$VCASH_ROOT/src/deps/db" && "$VCASH_ROOT/src/deps/openssl" ]]; then
 		mv -f $VCASH_ROOT/src/deps/ $VCASH_ROOT/backup/
 		ALL_DEPS=1
 	elif [[ -d "$VCASH_ROOT/backup/deps/boost" && "$VCASH_ROOT/backup/deps/db" && "$VCASH_ROOT/backup/deps/openssl" ]]; then
 		ALL_DEPS=1
-	else
-		ALL_DEPS=0
 	fi
 else
 	if [[ -d "$VCASH_ROOT/backup/deps/boost" && "$VCASH_ROOT/backup/deps/db" && "$VCASH_ROOT/backup/deps/openssl" ]]; then
 		ALL_DEPS=1
-	else
-		ALL_DEPS=0
 	fi
 fi
 
