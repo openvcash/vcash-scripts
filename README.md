@@ -7,11 +7,7 @@ I can't be responsible if you broke something.
 ## Req.
 
 #### GNU/Linux
-GCC/G++ >= 4.8.*
-git
-screen
-curl
-On low-spec hardware, don't forget to increase the SWAP (min 1024MB) to avoid the 'Virtual memory exhausted: Cannot allocate memory' during the build process.
+GCC/G++ >= 4.8.* / git / screen / curl. On low-spec hardware, don't forget to increase the SWAP (min 1024MB) to avoid the 'Virtual memory exhausted: Cannot allocate memory' during the build process.
 
 #### Debian / Ubuntu / Raspbian
 ```
