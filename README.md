@@ -1,10 +1,17 @@
-# Vanillacoin Install / Update Scripts
+# Vcash Install / Update Scripts
 
 ## Warning !
-Please backup your existing wallet files (~/.Vanillacoin/data/ folder).
+Please backup your existing wallet files (~/.Vcash/data/ folder).
 I can't be responsible if you broke something.
 
 ## Req.
+
+#### GNU/Linux
+GCC/G++ >= 4.8.*
+git
+screen
+curl
+On low-spec hardware, don't forget to increase the SWAP (min 1024MB) to avoid the 'Virtual memory exhausted: Cannot allocate memory' during the build process.
 
 #### Debian / Ubuntu / Raspbian
 ```
@@ -34,48 +41,38 @@ sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 ```
 
-## Install
-As user:
+## Install / Update
+As user (fresh ssh login as user, not su switch to user from the root account):
 ```
-cd ~
-bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/build-linux.sh)
+bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vcash-scripts/master/build-linux.sh)
 ```
-Install script auto launch vanillacoind at the end.
+The script will auto launch vcashd at the end.
 Resume the screen session with:
 ```
-screen -x vanillacoind
+screen -x vcashd
 ```
 Ctrl-a Ctrl-d to detach
 
 ## Launch
-Be sure there's no vanillacoind running before !
+Be sure there's no vcashd running before !
 ```
-ps x | grep '[v]anillacoind'
+ps x | grep '[v]cashd'
 ```
 To launch:
 ```
-cd ~/vanillacoin/
-screen -d -S vanillacoind -m ./vanillacoind
+cd ~/vcash/
+screen -d -S vcashd -m ./vcashd
 ```
-
-## Update
-As user: You must be in the vanillacoin/ folder before running the update script !
-
-```
-cd ~/vanillacoin/
-bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vanillacoin-scripts/master/update-linux.sh)
-```
-Previous binaries are saved in the backup/ dir.
 
 ## Crontab
 As user:
-Autostart Vanillacoin daemon on reboot with crontab:
+Autostart Vcash daemon on reboot with crontab:
 ```
 crontab -e
 ```
 Add this entry (edited with your username):
 ```
-@reboot pgrep vanillacoind > /dev/null || cd /home/your_username/vanillacoin && screen -d -S vanillacoind -m ./vanillacoind
+@reboot pgrep vcashd > /dev/null || cd /home/your_username/vcash && screen -d -S vcashd -m ./vcashd
 ```
 save & check crontab:
 ```
