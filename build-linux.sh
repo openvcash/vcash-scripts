@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Check root or user
 if (( EUID == 0 )); then
@@ -104,7 +103,7 @@ fi
 # Github
 echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
-git clone https://github.com/john-connor/vanillacoin.git src
+git clone https://github.com/john-connor/vcash.git src
 
 # Deps
 if [[ $ALL_DEPS == 1 ]]; then
@@ -159,7 +158,7 @@ fi
 # Vcash daemon
 echo "vcashd bjam build" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/src/test/
-../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release
+../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/src/test/bin/gcc-*/release/link-static/
 STACK_OUT=$(pwd)
 if [[ -f "$STACK_OUT/stack" ]]; then
@@ -168,8 +167,7 @@ if [[ -f "$STACK_OUT/stack" ]]; then
 	cp $STACK_OUT/stack $VCASH_ROOT/vcashd
 else
 	cd $VCASH_ROOT/src/test/
-	../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | grep error: | tee -a $VCASH_ROOT/build.log
-	echo "vcashd building error..." | tee -a $VCASH_ROOT/build.log
+	echo "vcashd building error..." 
 	exit
 fi
 
