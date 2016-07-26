@@ -126,11 +126,11 @@ else
 
 	# DB
 	cd $VCASH_ROOT
-	wget --no-check-certificate "https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz"
-	echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a  db-4.8.30.tar.gz" | sha256sum -c
-	tar -xzf db-4.8.30.tar.gz
-	echo "Compil & install db in deps folder" | tee -a $VCASH_ROOT/build.log
-	cd db-4.8.30/build_unix/
+	wget --no-check-certificate "https://download.oracle.com/berkeley-db/db-6.1.29.NC.tar.gz"
+	echo "e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e 6.1.29.NC.tar.gz" | sha256sum -c
+	tar -xzf db-6.1.29.NC.tar.gz
+	echo "Compile & install db in deps folder" | tee -a $VCASH_ROOT/build.log
+	cd db-6.1.29.NC/build_unix/
 	mkdir -p $VCASH_ROOT/src/deps/db/
 	../dist/configure --enable-cxx --disable-shared --prefix=$VCASH_ROOT/src/deps/db/
 	make -j$job && make install
