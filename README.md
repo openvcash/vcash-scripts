@@ -1,5 +1,7 @@
 # Vcash Install / Update Scripts
 
+## Will not build !! Current Vcash 0.4.8 code is not fully merged (release candidate code w/ error macro avoiding deployment) ! Wait for the 0.4.8 announcement: https://v.cash/forum/forums/announcements.2/
+
 ## Warning !
 Please backup your existing wallet files (~/.Vcash/data/ folder).
 I can't be responsible if you broke something.
