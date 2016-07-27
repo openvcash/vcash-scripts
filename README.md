@@ -1,6 +1,6 @@
 # Vcash Install / Update Scripts
 
-## Current Vcash 0.4.8 code is in release candidate stage ! See Wait for the 0.4.8 announcement: https://v.cash/forum/threads/version-0-4-8-rc1-release.575/
+## Current Vcash 0.4.8 code is in release candidate stage ! See: https://v.cash/forum/threads/version-0-4-8-rc1-release.575/
 
 ## For a 0.4.7 fresh install, see: https://github.com/xCoreDev/vcash-scripts/tree/0.4.7
 
