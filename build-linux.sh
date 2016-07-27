@@ -79,6 +79,7 @@ fi
 echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
 git clone https://github.com/john-connor/vcash.git src
+sed --in-place -e '34d' $VCASH_ROOT/src/include/coin/protocol.hpp
 
 # OpenSSL
 function build_openssl {
@@ -196,11 +197,22 @@ if [[ $RESTART == 1 ]]; then
 	echo " cd ~/vcash/ && screen -d -S vcashd -m ./vcashd"
 	echo -e "\n- - - - - - - - - \n"
 else
-	screen -d -S vcashd -m ./vcashd
 	echo -e "\n- - - - - - - - - \n"
-	echo " Vcash daemon launched in a screen session. To switch:"
+	echo " Vcash daemon built but not started !"
+	echo " Current code is in Release Candidate stage !!!"
+	echo " Make backups of the current ~/.Vcash/ directory !!!"
+	echo " Don't run it in production !!!"
 	echo -e "\n- - - - - - - - - \n"
+	echo " To start:"
+	echo " cd ~/vcash/ && screen -d -S vcashd -m ./vcashd"
+	echo -e "\n- - - - - - - - - \n"
+	echo " To attach the screen session:"
 	echo " screen -x vcashd"
-	echo " Ctrl-a Ctrl-d to detach without kill the daemon"
+	echo -e "\n- - - - - - - - - \n"
+	echo " To detach the screen session without stopping the daemon:"
+	echo " Ctrl-a Ctrl-d"
+	echo -e "\n- - - - - - - - - \n"
+	echo " To stop the daemon while attached to the screen session:"
+	echo " Ctrl-x"
 	echo -e "\n- - - - - - - - - \n"
 fi

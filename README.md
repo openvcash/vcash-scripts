@@ -1,5 +1,7 @@
 # Vcash Install / Update Scripts
 
+## Dev branch, only for tests, don't use it for production !
+
 ## Warning !
 Please backup your existing wallet files (~/.Vcash/data/ folder).
 I can't be responsible if you broke something.
@@ -40,9 +42,8 @@ sudo /etc/init.d/dphys-swapfile start
 ## Install / Update
 As user (fresh ssh login as user, not su switch to user from the root account):
 ```
-bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vcash-scripts/master/build-linux.sh)
+bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vcash-scripts/dev/build-linux.sh)
 ```
-The script will auto launch vcashd at the end.
 Resume the screen session with:
 ```
 screen -x vcashd
