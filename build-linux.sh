@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Deps infos
+OPENSSL_VER=1.0.1t
+OPENSSL_URL=https://www.openssl.org/source/openssl-1.0.1t.tar.gz
+OPENSSL_SHA=4a6ee491a2fdb22e519c76fdc2a628bb3cec12762cd456861d207996c8a07088
+
+DB_VER=6.1.29.NC
+DB_URL=https://download.oracle.com/berkeley-db/db-6.1.29.NC.tar.gz
+DB_SHA=e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e
+
+BOOST_VER=1_53_0
+BOOST_URL=https://sourceforge.net/projects/boost/files/boost/1.53.0/boost_1_53_0.tar.gz
+BOOST_SHA=7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39
+
 # Check root or user
 if (( EUID == 0 )); then
 	echo -e "\n- - - - - - - - - \n"
@@ -7,12 +20,6 @@ if (( EUID == 0 )); then
 	echo -e "\n- - - - - - - - - \n"
 	exit
 fi
-
-# Check if vanillacoind is running
-pgrep -l vanillacoind && echo "vanillacoind is running ! Please close it first." && exit
-
-# Check if vcashd is running
-pgrep -l vcashd && echo "vcashd is running ! Please close it first." && exit
 
 # Check thread number. Keep n-1 thread(s) if nproc >= 2
 nproc=$(nproc)
@@ -26,47 +33,15 @@ fi
 echo "Will use $job thread(s)"
 
 # Vcash home dir
-if [[ -d "$HOME/vanillacoin" ]]; then
-	echo "Found ~/vanillacoin/ dir, renaming to ~/vcash/"
-	if [[ ! -d "$HOME/vcash" ]]; then
-		mv ~/vanillacoin/ ~/vcash/
-	fi
-	if [[ -d "$HOME/vcash" ]]; then
-		echo "Vcash dir renamed from ~/vanillacoin/ to ~/vcash/"
-		VCASH_ROOT=$HOME/vcash/
-	else
-		echo "Vcash dir renaming failed..."
-		if [[ -d "$HOME/vanillacoin" ]]; then
-			echo "Vcash dir renaming failed... Using ~/vanillacoin/"
-			VCASH_ROOT=$HOME/vanillacoin/
-		fi
-	fi
-elif [[ -d "$HOME/vcash" ]]; then
-	echo "Found ~/vcash/ dir"
-	VCASH_ROOT=$HOME/vcash/
-else
-	echo "Creating ~/vcash/ dir"
-	mkdir -p ~/vcash/
-	VCASH_ROOT=$HOME/vcash/
-fi
+echo "Creating ~/vcash/ dir"
+mkdir -p ~/vcash/
+VCASH_ROOT=$HOME/vcash/
 
 # Remove build.log file
 rm -f $VCASH_ROOT/build.log
 
 # Backup dir
 mkdir -p $VCASH_ROOT/backup/
-
-# Rename daemon binary
-if [[ -f "$VCASH_ROOT/vanillacoind" ]]; then
-	mv $VCASH_ROOT/vanillacoind $VCASH_ROOT/vcashd
-	echo "daemon renamed from vanillacoind to vcashd"
-fi
-
-# Rename src dir
-if [[ -d "$VCASH_ROOT/vanillacoin-src" ]]; then
-	mv $VCASH_ROOT/vanillacoin-src/ $VCASH_ROOT/src/
-	echo "source dir renamed from vanillacoin-src/ to src/"
-fi
 
 # Check src dir & backup deps
 ALL_DEPS=0
@@ -105,54 +80,90 @@ echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
 git clone https://github.com/john-connor/vcash.git src
 
-# Deps
+# OpenSSL
+function build_openssl {
+	echo "OpenSSL Install" | tee -a $VCASH_ROOT/build.log
+	cd $VCASH_ROOT
+	rm -Rf $VCASH_ROOT/src/deps/openssl/
+	wget $OPENSSL_URL
+	echo "$OPENSSL_SHA  openssl-$OPENSSL_VER.tar.gz" | sha256sum -c
+	tar -xzf openssl-$OPENSSL_VER.tar.gz
+	cd openssl-$OPENSSL_VER
+	mkdir -p $VCASH_ROOT/src/deps/openssl/
+	./config threads no-comp --prefix=$VCASH_ROOT/src/deps/openssl/
+	make -j$job depend && make -j$job && make install && touch $VCASH_ROOT/src/deps/openssl/current_openssl_$OPENSSL_VER
+	# Clean
+	cd $VCASH_ROOT
+	echo "Clean after OpenSSL install" | tee -a $VCASH_ROOT/build.log
+	rm -Rf openssl-$OPENSSL_VER/
+	rm openssl-$OPENSSL_VER.tar.gz
+}
+
+# DB
+function build_db {
+	cd $VCASH_ROOT
+	rm -Rf $VCASH_ROOT/src/deps/db/
+	wget --no-check-certificate $DB_URL
+	echo "$DB_SHA  db-$DB_VER.tar.gz" | sha256sum -c
+	tar -xzf db-*.tar.gz
+	echo "Compile & install Berkeley DB in deps folder" | tee -a $VCASH_ROOT/build.log
+	cd db-$DB_VER/build_unix/
+	mkdir -p $VCASH_ROOT/src/deps/db/
+	../dist/configure --enable-cxx --disable-shared --prefix=$VCASH_ROOT/src/deps/db/
+	make -j$job && make install && touch $VCASH_ROOT/src/deps/db/current_db_$DB_VER
+	# Clean
+	cd $VCASH_ROOT
+	echo "Clean after Berkeley DB install" | tee -a $VCASH_ROOT/build.log
+	rm -Rf db-$DB_VER/
+	rm db-$DB_VER.tar.gz
+}
+
+# Boost
+function build_boost {
+	cd $VCASH_ROOT
+	rm -Rf $VCASH_ROOT/src/deps/boost/
+	wget $BOOST_URL
+	echo "$BOOST_SHA  boost_$BOOST_VER.tar.gz" | sha256sum -c
+	echo "Extract boost" | tee -a $VCASH_ROOT/build.log
+	tar -xzf boost_$BOOST_VER.tar.gz
+	echo "mv boost to deps folder & rename" | tee -a $VCASH_ROOT/build.log
+	mv boost_$BOOST_VER src/deps/boost
+	cd $VCASH_ROOT/src/deps/boost/
+	echo "Build boost system" | tee -a $VCASH_ROOT/build.log
+	./bootstrap.sh
+	./bjam -j$job link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
+	touch $VCASH_ROOT/src/deps/boost/current_boost_$BOOST_VER
+	# Clean
+	cd $VCASH_ROOT
+	echo "Clean after Boost install" | tee -a $VCASH_ROOT/build.log
+	rm boost_$BOOST_VER.tar.gz
+}
+
 if [[ $ALL_DEPS == 1 ]]; then
 	mv $VCASH_ROOT/backup/deps/boost/ $VCASH_ROOT/src/deps/
+	# Temp
+	if ! [[ -f "$VCASH_ROOT/src/deps/boost/current_boost_$BOOST_VER" ]]; then
+		touch $VCASH_ROOT/src/deps/boost/current_boost_$BOOST_VER
+	fi
 	mv $VCASH_ROOT/backup/deps/db/ $VCASH_ROOT/src/deps/
 	mv $VCASH_ROOT/backup/deps/openssl/ $VCASH_ROOT/src/deps/
 	rm -Rf $VCASH_ROOT/backup/deps/
 	echo "Deps restored." | tee -a $VCASH_ROOT/build.log
 else
-	# OpenSSL
-	echo "OpenSSL Install" | tee -a $VCASH_ROOT/build.log
-	cd $VCASH_ROOT
-	wget "https://www.openssl.org/source/openssl-1.0.1s.tar.gz"
-	echo "e7e81d82f3cd538ab0cdba494006d44aab9dd96b7f6233ce9971fb7c7916d511  openssl-1.0.1s.tar.gz" | sha256sum -c
-	tar -xzf openssl-*.tar.gz
-	cd openssl-*
-	mkdir -p $VCASH_ROOT/src/deps/openssl/
-	./config threads no-comp --prefix=$VCASH_ROOT/src/deps/openssl/
-	make -j$job depend && make -j$job && make install
+	build_openssl
+	build_db
+	build_boost
+fi
 
-	# DB
-	cd $VCASH_ROOT
-	wget --no-check-certificate "https://download.oracle.com/berkeley-db/db-4.8.30.tar.gz"
-	echo "e0491a07cdb21fb9aa82773bbbedaeb7639cbd0e7f96147ab46141e0045db72a  db-4.8.30.tar.gz" | sha256sum -c
-	tar -xzf db-4.8.30.tar.gz
-	echo "Compil & install db in deps folder" | tee -a $VCASH_ROOT/build.log
-	cd db-4.8.30/build_unix/
-	mkdir -p $VCASH_ROOT/src/deps/db/
-	../dist/configure --enable-cxx --disable-shared --prefix=$VCASH_ROOT/src/deps/db/
-	make -j$job && make install
-
-	# Boost
-	cd $VCASH_ROOT
-	wget "https://sourceforge.net/projects/boost/files/boost/1.53.0/boost_1_53_0.tar.gz"
-	echo "7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39  boost_1_53_0.tar.gz" | sha256sum -c
-	echo "Extract boost" | tee -a $VCASH_ROOT/build.log
-	tar -xzf boost_1_53_0.tar.gz
-	echo "mv boost to deps folder & rename" | tee -a $VCASH_ROOT/build.log
-	mv boost_1_53_0 src/deps/boost
-	cd $VCASH_ROOT/src/deps/boost/
-	echo "Build boost system" | tee -a $VCASH_ROOT/build.log
-	./bootstrap.sh
-	./bjam -j$job link=static toolset=gcc cxxflags=-std=gnu++0x --with-system release &
-
-	# Clean
-	cd $VCASH_ROOT
-	echo "Clean after install" | tee -a $VCASH_ROOT/build.log
-	rm -Rf db-4.8.30/ openssl-*/
-	rm openssl-*.tar.gz db-4.8.30.tar.gz boost_1_53_0.tar.gz
+# Deps upgrade ?
+if ! [[ -f "$VCASH_ROOT/src/deps/openssl/current_openssl_$OPENSSL_VER" ]]; then
+	build_openssl
+fi
+if ! [[ -f "$VCASH_ROOT/src/deps/db/current_db_$DB_VER" ]]; then
+	build_db
+fi
+if ! [[ -f "$VCASH_ROOT/src/deps/boost/current_boost_$BOOST_VER" ]]; then
+	build_boost
 fi
 
 # Vcash daemon
@@ -165,18 +176,31 @@ if [[ -f "$STACK_OUT/stack" ]]; then
 	echo "vcashd built !" | tee -a $VCASH_ROOT/build.log
 	strip $STACK_OUT/stack
 	cp $STACK_OUT/stack $VCASH_ROOT/vcashd
+	# Check if vcashd is running
+	RESTART=0
+	pgrep -l vcashd && RESTART=1
 else
 	cd $VCASH_ROOT/src/test/
 	echo "vcashd building error..." 
 	exit
 fi
 
-# Start
+# Start or restart
 cd $VCASH_ROOT
-screen -d -S vcashd -m ./vcashd
-echo -e "\n- - - - - - - - - \n"
-echo " Vcash daemon launched in a screen session. To switch:"
-echo -e "\n- - - - - - - - - \n"
-echo " screen -x vcashd"
-echo " Ctrl-a Ctrl-d to detach without kill the daemon"
-echo -e "\n- - - - - - - - - \n"
+
+if [[ $RESTART == 1 ]]; then
+	echo -e "\n- - - - - - - - - \n"
+	echo " ! Previous Vcash daemon is still running !"
+	echo -e "\n- - - - - - - - - \n"
+	echo " Please kill the process & start the fresh vcashd with:"
+	echo " cd ~/vcash/ && screen -d -S vcashd -m ./vcashd"
+	echo -e "\n- - - - - - - - - \n"
+else
+	screen -d -S vcashd -m ./vcashd
+	echo -e "\n- - - - - - - - - \n"
+	echo " Vcash daemon launched in a screen session. To switch:"
+	echo -e "\n- - - - - - - - - \n"
+	echo " screen -x vcashd"
+	echo " Ctrl-a Ctrl-d to detach without kill the daemon"
+	echo -e "\n- - - - - - - - - \n"
+fi
