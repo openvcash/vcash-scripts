@@ -78,7 +78,7 @@ fi
 # Github
 echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
-git clone https://github.com/john-connor/vcash.git src
+git clone https://github.com/xCoreDev/vcash.git src
 sed --in-place -e '34d' $VCASH_ROOT/src/include/coin/protocol.hpp
 
 # OpenSSL
