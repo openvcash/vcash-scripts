@@ -78,8 +78,7 @@ fi
 # Github
 echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
-git clone https://github.com/xCoreDev/vcash.git src
-sed --in-place -e '34d' $VCASH_ROOT/src/include/coin/protocol.hpp
+git clone -b dev https://github.com/xCoreDev/vcash.git src
 
 # OpenSSL
 function build_openssl {
@@ -198,10 +197,9 @@ if [[ $RESTART == 1 ]]; then
 	echo -e "\n- - - - - - - - - \n"
 else
 	echo -e "\n- - - - - - - - - \n"
-	echo " Vcash daemon built but not started !"
-	echo " Current code is in Release Candidate stage !!!"
-	echo " Make backups of the current ~/.Vcash/ directory !!!"
-	echo " Don't run it in production !!!"
+	echo " Vcash daemon built but not started."
+	echo " Current code is in dev stage !"
+	echo " Make backups of the current ~/.Vcash/ directory !"
 	echo -e "\n- - - - - - - - - \n"
 	echo " To start:"
 	echo " cd ~/vcash/ && screen -d -S vcashd -m ./vcashd"
