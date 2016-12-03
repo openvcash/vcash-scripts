@@ -169,7 +169,7 @@ fi
 # Vcash daemon
 echo "vcashd bjam build" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/src/coin/test/
-../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | tee -a $VCASH_ROOT/build.log
+../../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/src/coin/test/bin/gcc-*/release/link-static/
 STACK_OUT=$(pwd)
 if [[ -f "$STACK_OUT/stack" ]]; then
