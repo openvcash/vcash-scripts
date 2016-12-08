@@ -168,9 +168,9 @@ fi
 
 # Vcash daemon
 echo "vcashd bjam build" | tee -a $VCASH_ROOT/build.log
-cd $VCASH_ROOT/src/test/
-../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | tee -a $VCASH_ROOT/build.log
-cd $VCASH_ROOT/src/test/bin/gcc-*/release/link-static/
+cd $VCASH_ROOT/src/coin/test/
+../../deps/boost/bjam -j$job toolset=gcc cxxflags=-std=gnu++0x release | tee -a $VCASH_ROOT/build.log
+cd $VCASH_ROOT/src/coin/test/bin/gcc-*/release/link-static/
 STACK_OUT=$(pwd)
 if [[ -f "$STACK_OUT/stack" ]]; then
 	echo "vcashd built !" | tee -a $VCASH_ROOT/build.log
@@ -180,7 +180,7 @@ if [[ -f "$STACK_OUT/stack" ]]; then
 	RESTART=0
 	pgrep -l vcashd && RESTART=1
 else
-	cd $VCASH_ROOT/src/test/
+	cd $VCASH_ROOT/src/coin/test/
 	echo "vcashd building error..." 
 	exit
 fi
