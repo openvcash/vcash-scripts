@@ -78,7 +78,7 @@ fi
 # Github
 echo "Git clone vcash in src dir" | tee -a $VCASH_ROOT/build.log
 cd $VCASH_ROOT/
-git clone https://github.com/xCoreDev/vcash.git src
+git clone https://github.com/openvcash/vcash.git src
 
 # OpenSSL
 function build_openssl {
