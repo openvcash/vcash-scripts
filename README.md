@@ -40,7 +40,7 @@ sudo /etc/init.d/dphys-swapfile start
 ## Install / Update
 As user (fresh ssh login as user, not su switch to user from the root account):
 ```
-bash < <(curl -s  https://raw.githubusercontent.com/xCoreDev/vcash-scripts/master/build-linux.sh)
+bash < <(curl -s  https://raw.githubusercontent.com/openvcash/vcash-scripts/master/build-linux.sh)
 ```
 The script will auto launch vcashd at the end.
 Resume the screen session with:
