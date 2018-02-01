@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Deps infos
-OPENSSL_VER=1.0.2k
-OPENSSL_URL=https://www.openssl.org/source/openssl-1.0.2k.tar.gz
-OPENSSL_SHA=6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0
+OPENSSL_VER=1.0.2n
+OPENSSL_URL=https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
+OPENSSL_SHA=370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe
 
 DB_VER=6.1.29.NC
-DB_URL=https://download.oracle.com/berkeley-db/db-6.1.29.NC.tar.gz
+DB_URL=https://download.oracle.com/berkeley-db/db-$DB_VER.NC.tar.gz
 DB_SHA=e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e
 
 BOOST_VER=1_53_0
-BOOST_URL=https://sourceforge.net/projects/boost/files/boost/1.53.0/boost_1_53_0.tar.gz
+BOOST_URL=https://sourceforge.net/projects/boost/files/boost/${BOOST_VER//_/\.}/boost_$BOOST_VER.tar.gz
 BOOST_SHA=7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39
 
 # Check root or user
