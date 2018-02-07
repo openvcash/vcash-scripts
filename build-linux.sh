@@ -6,7 +6,7 @@ OPENSSL_URL="https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz"
 OPENSSL_SHA="370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe"
 
 DB_VER="6.1.29.NC"
-DB_URL="http://download.oracle.com/berkeley-db/db-$DB_VER.NC.tar.gz"
+DB_URL="http://download.oracle.com/berkeley-db/db-$DB_VER.tar.gz"
 DB_SHA="e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e"
 
 BOOST_VER="1_53_0"
