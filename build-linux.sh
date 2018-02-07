@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # Deps infos
-OPENSSL_VER=1.0.2n
-OPENSSL_URL=https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz
-OPENSSL_SHA=370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe
+OPENSSL_VER="1.0.2n"
+OPENSSL_URL="https://www.openssl.org/source/openssl-$OPENSSL_VER.tar.gz"
+OPENSSL_SHA="370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe"
 
-DB_VER=6.1.29.NC
-DB_URL=https://download.oracle.com/berkeley-db/db-$DB_VER.NC.tar.gz
-DB_SHA=e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e
+DB_VER="6.1.29.NC"
+DB_URL="http://download.oracle.com/berkeley-db/db-$DB_VER.NC.tar.gz"
+DB_SHA="e3404de2e111e95751107d30454f569be9ec97325d5ea302c95a058f345dfe0e"
 
-BOOST_VER=1_53_0
-BOOST_URL=https://sourceforge.net/projects/boost/files/boost/${BOOST_VER//_/\.}/boost_$BOOST_VER.tar.gz
-BOOST_SHA=7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39
+BOOST_VER="1_53_0"
+BOOST_URL="https://sourceforge.net/projects/boost/files/boost/${BOOST_VER//_/\.}/boost_$BOOST_VER.tar.gz"
+BOOST_SHA="7c4d1515e0310e7f810cbbc19adb9b2d425f443cc7a00b4599742ee1bdfd4c39"
 
 # Check root or user
 if (( EUID == 0 )); then
